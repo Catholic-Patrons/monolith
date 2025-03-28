@@ -8,15 +8,21 @@
         if (curNavItem) {
             (curNavItem as HTMLElement).style.textDecoration = "underline";
         }
+
+        if (!window.location.host.includes("catholicpatrons.org")) {
+            (document.getElementById("dev-tag") as HTMLElement).innerHTML = "(Dev Version)";
+        }
     });
 
 </script>
 
 <div class="navbar">
     <a href="/" style="padding: 0.1em 0.5em; padding-left: 0px; text-decoration: none; color: white;">catholicpatrons.org</a>
+    <span id="dev-tag" style="font-size: 0.7em; display: inline-block; padding-top: 0.4em;"></span>
     <div class="navbar-right-seg">
         <a class="nav-item" href="/about">About</a>
         <a class="nav-item" href="/contact">Contact</a>
+        <a class="nav-item" href="/search">Search</a>
     </div>
 </div>
 
