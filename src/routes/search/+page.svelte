@@ -1,37 +1,25 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
     import NavBar from '../NavBar.svelte';
     import Footer from '../Footer.svelte';
     import SearchResult from './SearchResult.svelte';
+    import { CaseSearchService } from '../../services';
+    import type { Cause } from '../../models';
 
-    const causeTags = ["Addition", "Renovation", "Building"];
+    const causeTags = ['Addition', 'Renovation', 'Building'];
 
-    let causes = [
-        {
-            "id": "321654",
-            "title": "St. Benedict's - Expanding the church parking lot",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-            "donation_link": "https://pushpay.com/g/stbenedictatchison",
-            "images": ["placeholder1.jpeg"],
-            "start": 1743040680885,
-            "end": 0,
-            "goal": 15000,
-            "raised": 8500,
-            "tags": ["Addition"]
-        },
-        {
-            "id": "321654",
-            "title": "St. Joseph's - Installing new flooring",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-            "donation_link": "https://pushpay.com/g/stbenedictatchison",
-            "images": ["placeholder2.jpeg"],
-            "start": 1743040680885,
-            "end": 0,
-            "goal": 15000,
-            "raised": -1,
-            "tags": ["Addition", "Renovation"]
-        },
-    ];
+    const searchService = new CaseSearchService();
 
+    let causes: Cause[];
+    
+    onMount(async () => {
+        try {
+            causes = await searchService.search();
+        } catch (error: unknown) {
+            console.error('Error occurred while searching causes. Error: ', { error });
+        } 
+    });
+    
     function toggleFilter(filterName: string) {
         let filterEls = document.getElementsByClassName("filter-tag");
         for (let i = 0; i < filterEls.length; i++) {
@@ -86,7 +74,7 @@
             <div>
                 {#each causes as cause}
                     <SearchResult
-                        thumbnail={cause.images[0]} 
+                        thumbnail={cause.thumbnailUrl} 
                         title={cause.title}
                         description={cause.description}
                         raised={cause.raised}

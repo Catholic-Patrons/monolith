@@ -1,0 +1,26 @@
+[
+    {
+        "id": 321654,
+        "title": "St. Benedict's - Expanding the church parking lot",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
+        "donationLink": "https://pushpay.com/g/stbenedictatchison",
+        "thumbnailUrl": "placeholder1.jpeg",
+        "start": 1743040680885,
+        "end": 0,
+        "goal": 15000,
+        "raised": 8500,
+        "tags": ["Addition"]
+    },
+    {
+        "id": 321655,
+        "title": "St. Joseph's - Installing new flooring",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
+        "donationLink": "https://pushpay.com/g/stbenedictatchison",
+        "thumbnailUrl": "placeholder2.jpeg",
+        "start": 1743040680885,
+        "end": 0,
+        "goal": 15000,
+        "raised": 275,
+        "tags": ["Addition", "Renovation"]
+    }
+]
