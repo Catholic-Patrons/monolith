@@ -9,12 +9,12 @@ export class CaseSearchService {
 
         if (!term) return this._allCauses;
 
-        const normalizedTerm = term.toLowerCase();
+        const normalizedTerm = term.trim().toLowerCase();
 
         return [...this._allCauses].filter((cause) => 
-            cause.title.toLowerCase().includes(normalizedTerm) ||
-            cause.description.toLowerCase().includes(normalizedTerm) ||
-            cause.tags.some(tag => tag.toLowerCase().includes(normalizedTerm))
+            cause.title.trim().toLowerCase().includes(normalizedTerm) ||
+            cause.description.trim().toLowerCase().includes(normalizedTerm) ||
+            cause.tags.some(tag => tag.trim().toLowerCase().includes(normalizedTerm))
         );
     }
 }

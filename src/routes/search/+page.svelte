@@ -10,14 +10,19 @@
 
     const searchService = new CaseSearchService();
 
+    let searchTerm = '';
     let causes: Cause[];
-    
-    onMount(async () => {
+
+    const setCauses = async () => {
         try {
-            causes = await searchService.search();
+            causes = await searchService.search({ term: searchTerm });
         } catch (error: unknown) {
             console.error('Error occurred while searching causes. Error: ', { error });
         } 
+    };
+    
+    onMount(async () => {
+        await setCauses();
     });
     
     function toggleFilter(filterName: string) {
@@ -34,6 +39,8 @@
             }
         }
     }
+
+    // $: setCauses();
 </script>
 
 <div style="display: flex; flex-flow: column; min-height: 100vh;">
@@ -42,7 +49,7 @@
     <div class="page-contents" style="min-height: calc(100vh - 7em);">
         <!-- search bar + sort by container -->
         <div id="top-container">
-            <input id="search-bar" type="text" placeholder="Search for causes">
+            <input id="search-bar" type="text" placeholder="Search for causes" bind:value={searchTerm}>
 
             <select id="sort-filter">
                 <option value="sort-alpha-az">Alphabetical (A-Z)</option>
@@ -53,7 +60,7 @@
                 <option value="sort-fund-az">Funding Goal (Highest First)</option>
             </select>
 
-            <button id="search-btn" class="btn">Search</button>
+            <button id="search-btn" class="btn" on:click={async ()=> await setCauses()}>Search</button>
         </div>
         <div style="display: flex;">
             <!-- filters container -->
