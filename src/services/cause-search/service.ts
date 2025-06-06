@@ -4,17 +4,29 @@ import staticCauses from './causes.json';
 export class CaseSearchService {
     private readonly _allCauses: Cause[] = staticCauses as Cause[];
 
-    async search(criteria?: { term: string }): Promise<Cause[]> {
-        const { term } = criteria ?? {};
+    async search(criteria?: { 
+        term: string
+        tags: string[] 
+    }): Promise<Cause[]> {
+        const { term, tags } = criteria ?? {};
 
-        if (!term) return this._allCauses;
+        let causes = [...this._allCauses];
 
-        const normalizedTerm = term.trim().toLowerCase();
+        if (term) {
+            const normalizedTerm = term.trim().toLowerCase();
 
-        return [...this._allCauses].filter((cause) => 
-            cause.title.trim().toLowerCase().includes(normalizedTerm) ||
-            cause.description.trim().toLowerCase().includes(normalizedTerm) ||
-            cause.tags.some(tag => tag.trim().toLowerCase().includes(normalizedTerm))
-        );
+            causes = causes.filter((cause) => {
+                return cause.title.trim().toLowerCase().includes(normalizedTerm) ||
+                    cause.description.trim().toLowerCase().includes(normalizedTerm);
+            });
+        }
+
+        if (tags?.length) {
+            causes = causes.filter((cause) => {
+                return cause.tags.some((tag) => tags.includes(tag));
+            });
+        }
+
+        return causes;
     }
 }

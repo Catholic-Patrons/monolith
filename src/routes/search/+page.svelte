@@ -11,11 +11,12 @@
     const searchService = new CaseSearchService();
 
     let searchTerm = '';
+    let selectedTags: string[] = [];
     let causes: Cause[];
 
     const setCauses = async () => {
         try {
-            causes = await searchService.search({ term: searchTerm });
+            causes = await searchService.search({ term: searchTerm, tags: selectedTags });
         } catch (error: unknown) {
             console.error('Error occurred while searching causes. Error: ', { error });
         } 
@@ -25,20 +26,30 @@
         await setCauses();
     });
     
-    function toggleFilter(filterName: string) {
-        let filterEls = document.getElementsByClassName("filter-tag");
-        for (let i = 0; i < filterEls.length; i++) {
-            let el = filterEls[i] as HTMLElement;
-            if (el.innerText === filterName) {
-                if (el.classList.contains("selected-filter")) {
-                    el.classList.remove("selected-filter");
-                } else {
-                    el.classList.add("selected-filter");
-                }
-                break;
-            }
+    const toggleFilter = async (event: MouseEvent) => {
+        console.log('toggleFilter() called', { event });
+
+        const element = event.target as HTMLElement;
+
+        const tag = element.innerText;
+
+        console.log('element', { element });
+
+        if (element.classList.contains('selected-filter')) {
+            console.log('button selected, unselecting');
+            element.classList.remove('selected-filter');
+
+            selectedTags = selectedTags.filter((selected) => selected !== tag);
+        } else {
+            console.log('button not selected, selecting');
+            element.classList.add('selected-filter');
+
+            selectedTags.push(tag);
         }
-    }
+        console.log('updated class list', { classList: element.classList });
+
+        await setCauses();
+    };
 
     // $: setCauses();
 </script>
@@ -65,17 +76,16 @@
         <div style="display: flex;">
             <!-- filters container -->
             <div id="search-left-container">
-                
                 <strong class="filter-label">Filter by:</strong>
                 {#each causeTags as tagName}
-                    <button class="filter-tag{tagName == "Addition" ? " selected-filter" : ""}" on:click={()=>toggleFilter(tagName)}>{tagName}</button>
+                    <button class="filter-tag" on:click={async (event: MouseEvent) => await toggleFilter(event)}>{tagName}</button>
                 {/each}
 
                 <!-- divider -->
-                <div style="width: 100%; height: 2px; background-color: gray; margin-top: 16px; margin-bottom: 12px;"></div>
+                <!-- <div style="width: 100%; height: 2px; background-color: gray; margin-top: 16px; margin-bottom: 12px;"></div>
 
                 <strong class="filter-label">Location:</strong>
-                <input type="text" placeholder="Search">
+                <input type="text" placeholder="Search"> -->
             </div>
             <!-- results container -->
             <div>
