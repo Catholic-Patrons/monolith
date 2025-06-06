@@ -4,13 +4,6 @@ import staticCauses from './causes.json';
 export class CaseSearchService {
     private readonly _allCauses: Cause[] = staticCauses as Cause[];
 
-    // <option value="sort-alpha-az">Alphabetical (A-Z)</option>
-    //             <option value="sort-alpha-az">Alphabetical (Z-A)</option>
-    //             <option value="sort-start-az">Start Date (Newest First)</option>
-    //             <option value="sort-start-az">Start Date (Oldest First)</option>
-    //             <option value="sort-fund-az">Funding Goal (Lowest First)</option>
-    //             <option value="sort-fund-az">Funding Goal (Highest First)</option>
-
     async search(criteria?: { 
         term: string
         tags: string[] 
@@ -37,25 +30,32 @@ export class CaseSearchService {
 
         switch (sortOrder) {
             case 'alpha-asc':
-                causes.sort((causeA, causeB) => causeA.title.localeCompare(causeB.title));
+                causes = causes.sort((causeA, causeB) => causeA.title.localeCompare(causeB.title));
+                break;
 
             case 'alpha-desc':
-                causes.sort((causeA, causeB) => causeB.title.localeCompare(causeA.title));
+                causes = causes.sort((causeA, causeB) => causeB.title.localeCompare(causeA.title));
+                break;
 
             case 'fund-asc':
-                causes.sort((causeA, causeB) => causeA.goal - causeB.goal);
+                causes = causes.sort((causeA, causeB) => causeA.goal - causeB.goal);
+                break;
 
             case 'fund-desc':
-                causes.sort((causeA, causeB) => causeB.goal - causeA.goal);
+                causes = causes.sort((causeA, causeB) => causeB.goal - causeA.goal);
+                break;
 
             case 'start-asc':
-                causes.sort((causeA, causeB) => causeA.start - causeB.start);
+                causes = causes.sort((causeA, causeB) => causeA.start - causeB.start);
+                break;
 
             case 'start-desc':
-                causes.sort((causeA, causeB) => causeB.start - causeA.start);
+                causes = causes.sort((causeA, causeB) => causeB.start - causeA.start);
+                break;
 
             default:
-                causes.sort((causeA, causeB) => causeA.title.localeCompare(causeB.title));
+                causes = causes.sort((causeA, causeB) => causeA.title.localeCompare(causeB.title));
+                break;
         }
 
         return Promise.resolve(causes);

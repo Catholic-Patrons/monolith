@@ -57,7 +57,9 @@
         await setCauses();
     };
 
-    // $: setCauses();
+    const toggleSort = async () => {
+        await setCauses();
+    };
 </script>
 
 <div style="display: flex; flex-flow: column; min-height: 100vh;">
@@ -68,9 +70,9 @@
         <div id="top-container">
             <input id="search-bar" type="text" placeholder="Search for causes" bind:value={searchTerm}>
 
-            <select id="sort-filter">
+            <select id="sort-filter" bind:value={selectedSortOption} on:change={async () => toggleSort()}>
                 {#each sortOptions as option}
-                    <option value={option}>{sortOptionFriendlyNameMapping.get(option)}</option>
+                    <option id={option} value={option}>{sortOptionFriendlyNameMapping.get(option)}</option>
                 {/each}
             </select>
 
