@@ -11,7 +11,7 @@
     const searchService = new CaseSearchService();
 
     let searchTerm = '';
-    let selectedTags: string[] = [];
+    let selectedTags: string[] = [...causeTags];
     let causes: Cause[];
 
     const setCauses = async () => {
@@ -78,7 +78,7 @@
             <div id="search-left-container">
                 <strong class="filter-label">Filter by:</strong>
                 {#each causeTags as tagName}
-                    <button class="filter-tag" on:click={async (event: MouseEvent) => await toggleFilter(event)}>{tagName}</button>
+                    <button class="filter-tag selected-filter" on:click={async (event: MouseEvent) => await toggleFilter(event)}>{tagName}</button>
                 {/each}
 
                 <!-- divider -->
