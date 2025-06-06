@@ -8,15 +8,28 @@
 
     const causeTags = ['Addition', 'Renovation', 'Building'];
 
+    const sortOptions = ['alpha-asc', 'alpha-desc', 'start-asc', 'start-desc', 'fund-asc', 'fund-desc'];
+
+    const sortOptionFriendlyNameMapping = new Map<string, string>([
+        ['alpha-asc', 'Alphabetical (A-Z)'],
+        ['alpha-desc', 'Alphabetical (Z-A)'],
+        ['start-asc', 'Start Date (Newest First)'],
+        ['start-desc', 'Start Date (Oldest First)'],
+        ['fund-asc', 'Funding Goal (Lowest First)'],
+        ['fund-desc', 'Funding Goal (Highest First)']
+    ]);
+
     const searchService = new CaseSearchService();
 
     let searchTerm = '';
     let selectedTags: string[] = [...causeTags];
+    let selectedSortOption = 'alpha-asc';
+
     let causes: Cause[];
 
     const setCauses = async () => {
         try {
-            causes = await searchService.search({ term: searchTerm, tags: selectedTags });
+            causes = await searchService.search({ term: searchTerm, tags: selectedTags, sortOrder: selectedSortOption });
         } catch (error: unknown) {
             console.error('Error occurred while searching causes. Error: ', { error });
         } 
@@ -27,26 +40,19 @@
     });
     
     const toggleFilter = async (event: MouseEvent) => {
-        console.log('toggleFilter() called', { event });
-
         const element = event.target as HTMLElement;
 
         const tag = element.innerText;
 
-        console.log('element', { element });
-
         if (element.classList.contains('selected-filter')) {
-            console.log('button selected, unselecting');
             element.classList.remove('selected-filter');
 
             selectedTags = selectedTags.filter((selected) => selected !== tag);
         } else {
-            console.log('button not selected, selecting');
             element.classList.add('selected-filter');
 
             selectedTags.push(tag);
         }
-        console.log('updated class list', { classList: element.classList });
 
         await setCauses();
     };
@@ -63,12 +69,9 @@
             <input id="search-bar" type="text" placeholder="Search for causes" bind:value={searchTerm}>
 
             <select id="sort-filter">
-                <option value="sort-alpha-az">Alphabetical (A-Z)</option>
-                <option value="sort-alpha-az">Alphabetical (Z-A)</option>
-                <option value="sort-start-az">Start Date (Newest First)</option>
-                <option value="sort-start-az">Start Date (Oldest First)</option>
-                <option value="sort-fund-az">Funding Goal (Lowest First)</option>
-                <option value="sort-fund-az">Funding Goal (Highest First)</option>
+                {#each sortOptions as option}
+                    <option value={option}>{sortOptionFriendlyNameMapping.get(option)}</option>
+                {/each}
             </select>
 
             <button id="search-btn" class="btn" on:click={async ()=> await setCauses()}>Search</button>
