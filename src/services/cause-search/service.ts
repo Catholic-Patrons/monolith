@@ -27,6 +27,6 @@ export class CaseSearchService {
             });
         }
 
-        return causes;
+        return Promise.resolve(causes);
     }
 }
