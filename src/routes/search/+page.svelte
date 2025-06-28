@@ -68,7 +68,7 @@
     <div class="page-contents" style="min-height: calc(100vh - 7em);">
         <!-- search bar + sort by container -->
         <div id="top-container">
-            <input id="search-bar" type="text" placeholder="Search for causes" bind:value={searchTerm}>
+            <input id="search-bar" type="text" placeholder="Search for causes" bind:value={searchTerm} on:keydown={(e) => {if (e.key === "Enter") setCauses()}}>
 
             <select id="sort-filter" bind:value={selectedSortOption} on:change={async () => toggleSort()}>
                 {#each sortOptions as option}
